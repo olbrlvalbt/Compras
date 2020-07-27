@@ -1,7 +1,6 @@
-import React, {Component, useState} from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Platform, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, TextInput, View, ScrollView, Platform, StatusBar } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
 
 
@@ -10,8 +9,8 @@ const CATEGORIES = [
     name: 'Cocina',
     products: [
       {
-        name: 'Aceite de canola',
-        model: 'PAM',
+        name: 'Aceite de canola en aerosol',
+        brand: 'PAM',
         presentations: [
           'normal'
         ],
@@ -19,7 +18,7 @@ const CATEGORIES = [
       },
       {
         name: 'Salsa catsup',
-        model: 'Del Monte',
+        brand: 'Del Monte',
         presentations: [
           '300mg',
           '600mg'
@@ -33,7 +32,7 @@ const CATEGORIES = [
     products: [
       {
         name: 'Queso crema',
-        model: 'Philadelphia',
+        brand: 'Philadelphia',
         presentations: [
           'normal',
           'light'
@@ -46,19 +45,28 @@ const CATEGORIES = [
 
 const RenderRow = (product) => {
   return (
-    <View style={{ height: 50, flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
-      <View style={{width: 200, backgroundColor: 'lightgrey'}}> 
+    <View style={styles.row}>
+      <View style={styles.productCol}> 
         <Text>{product.name}</Text>
       </View>
-      <View style={{ flex: 1, alignSelf: 'stretch' , backgroundColor: 'red'}} />
+      <View style={styles.productCol}> 
+        <Text>{product.brand}</Text>
+      </View>
+      <View style={{width: 50}}>
+        <TextInput 
+          style={{ height: 30, borderColor: 'gray', borderWidth: 1 }}
+          keyboardType = 'numeric'
+          onChangeText = {(text)=> onChangeText(text)}
+          value = {'0'}//this.state.myNumber}
+        />
+      </View>
     </View>
   );
-    
 }
 
 const Table = (category) => {
       return (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ flexDirection: 'column', borderColor: 'red', borderWidth: 1 }}>
           {
               category.products.map((product) => {
                   return RenderRow(product);
@@ -72,8 +80,9 @@ const RenderHeader = (section, _, isActive) => {
   return (
     <Animatable.View
       duration={400}
-      style={[styles.header, isActive ? styles.active : styles.inactive]}
-      transition="backgroundColor">
+      style={[styles.header, styles.inactive]}
+      transition="backgroundColor"
+    >
       <Text style={styles.headerText}>{section.name + ' ' + (isActive ? '^' : 'v')}</Text>
       <View style={{ backgroundColor: '#000', height: 1, marginTop: 10, opacity : (isActive ? 0 : 1)}} />
     </Animatable.View>
@@ -84,8 +93,9 @@ const RenderContent = (section, _, isActive) => {
   return (
     <Animatable.View
       duration={400}
-      style={[styles.content, isActive ? styles.active : styles.inactive]}
-      transition="backgroundColor">
+      style={[styles.content]}
+      transition="backgroundColor"
+    >
       <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
         {Table(section)}
       </Animatable.View>
@@ -162,7 +172,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#e6faff',
   },
   active: {
     backgroundColor: '#e6faff',
@@ -170,4 +180,17 @@ const styles = StyleSheet.create({
   inactive: {
     backgroundColor: '#e0f9ff',
   },
+  row: {
+    height: 70,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    borderWidth: 1,
+    borderColor: 'grey'
+  },
+  productCol: {
+    flex: 1,
+    flexGrow: 1,
+    backgroundColor: 'lightgrey'
+  }
 });
