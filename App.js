@@ -4,44 +4,38 @@ import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 
 
-const CATEGORIES = [
+const CATALOG = [
   {
-    name: 'Cocina',
-    products: [
-      {
-        name: 'Aceite de canola en aerosol',
-        brand: 'PAM',
-        presentations: [
-          'normal'
-        ],
-        store: 'W'
-      },
-      {
-        name: 'Salsa catsup',
-        brand: 'Del Monte',
-        presentations: [
-          '300mg',
-          '600mg'
-        ],
-        store: 'C'
-      }
-    ]
+    name: 'Aceite de canola en aerosol',
+    brand: 'PAM',
+    category: 'Cocina',
+    presentations: [
+      'normal'
+    ],
+    store: 'W'
   },
   {
-    name: 'Lacteos',
-    products: [
-      {
-        name: 'Queso crema',
-        brand: 'Philadelphia',
-        presentations: [
-          'normal',
-          'light'
-        ],
-        store: 'W'
-      }
-    ]
+    name: 'Salsa catsup',
+    brand: 'Del Monte',
+    category: 'Cocina',
+    presentations: [
+      '300mg',
+      '600mg'
+    ],
+    store: 'C'
+  },
+  {
+    name: 'Queso crema',
+    brand: 'Philadelphia',
+    category: 'Lacteos',
+    presentations: [
+      'normal',
+      'light'
+    ],
+    store: 'W'
   }
 ];
+
 
 const RenderRow = (product) => {
   return (
@@ -78,9 +72,9 @@ const Table = (category) => {
       return (
           <View style={{ flexDirection: 'column' }}>
           {
-              category.products.map((product) => {
-                  return RenderRow(product);
-              })
+            CATALOG.filter(product => product.category == category).map((product) => {
+                return RenderRow(product);
+            })
           }
           </View>
   );
@@ -93,7 +87,7 @@ const RenderHeader = (section, _, isActive) => {
       style={[styles.header]}
       transition="backgroundColor"
     >
-      <Text style={styles.headerText}>{section.name + ' ' + (isActive ? '^' : 'v')}</Text>
+      <Text style={styles.headerText}>{section + ' ' + (isActive ? '^' : 'v')}</Text>
       
     </Animatable.View>
   );
@@ -118,7 +112,7 @@ const CategoryTable = () => {
 
   return (
     <Accordion
-      sections={CATEGORIES}
+      sections={[...new Set(CATALOG.map((product)=>product.category))]}
       activeSections={activeSections}
       touchableComponent={TouchableOpacity}
       expandMultiple={true}
